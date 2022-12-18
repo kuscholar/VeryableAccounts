@@ -21,8 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         
         window = UIWindow(frame: UIScreen.main.bounds)
+        
+        let accountListViewController = AccountListViewController()
         window?.rootViewController = UINavigationController(
-            rootViewController: AccountListViewController()
+            rootViewController: accountListViewController
         )
         window?.makeKeyAndVisible()
 

@@ -1,14 +1,14 @@
 //
-//  Account.swift
+//  Card.swift
 //  Veryable Sample
 //
-//  Created by Isaac Sheets on 5/27/21.
-//  Copyright © 2021 Veryable Inc. All rights reserved.
+//  Created by Kusch Qin on 12/18/22.
+//  Copyright © 2022 Veryable Inc. All rights reserved.
 //
 
 import Foundation
 
-struct Account {
+struct Card {
     var name: String
     var detail: String
     var description: String
