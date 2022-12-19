@@ -16,7 +16,6 @@ class AccountDetailsViewController: UIViewController {
     private let imageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-//        iv.image = UIImage(named: "bank")
         return iv
     }()
     
@@ -24,6 +23,8 @@ class AccountDetailsViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
+        label.font = UIFont.vryAvenirNextDemiBold(16)
+        label.textColor = ViewColor.name.color
         return label
     }()
     
@@ -31,6 +32,8 @@ class AccountDetailsViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
+        label.font = UIFont.vryAvenirNextRegular(14)
+        label.textColor = ViewColor.description.color
         return label
     }()
     
@@ -57,7 +60,7 @@ class AccountDetailsViewController: UIViewController {
     }
     
     private func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = ViewColor.background.color
         if account != nil {
             imageView.image = UIImage(named: "bank")
         } else if card != nil {
@@ -108,7 +111,7 @@ class AccountDetailsViewController: UIViewController {
         // Configure back button
         let backButtonImage = UIImage(named: "back_arrow")
         let backButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(didTapBackButton))
-        backButton.tintColor = .black
+        backButton.tintColor = VGrey.dark.color
         backButton.customView?.translatesAutoresizingMaskIntoConstraints = false
         navigationItem.leftBarButtonItem = backButton
         backButton.customView?.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true

@@ -13,11 +13,20 @@ class HeaderView: UICollectionReusableView {
     //MARK: Properties
     
     static let reuseIdentifier = "HeaderView"
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.vryAvenirNextBold(15)
-        label.textColor = .black
+        label.textColor = ViewColor.name.color
         return label
+    }()
+    
+    private let border: UIView = {
+        let view = UIView()
+        view.layer.borderWidth = 0.3
+        view.layer.borderColor = UIColor.black.cgColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     //MARK: Initialization
@@ -39,16 +48,25 @@ class HeaderView: UICollectionReusableView {
     }
     
     private func setupViews() {
-        backgroundColor = .gray
+        backgroundColor = ViewColor.background.color
         addSubview(titleLabel)
+        addSubview(border)
     }
     
     private func setupConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8)
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16)
         ])
+        
+        border.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            border.topAnchor.constraint(equalTo: superview!.topAnchor),
+//            border.leadingAnchor.constraint(equalTo: superview!.leadingAnchor),
+//            border.trailingAnchor.constraint(equalTo: superview!.trailingAnchor),
+//            border.bottomAnchor.constraint(equalTo: superview!.bottomAnchor)
+//        ])
     }
     
     

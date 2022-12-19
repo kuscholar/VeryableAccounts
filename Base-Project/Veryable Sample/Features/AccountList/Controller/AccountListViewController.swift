@@ -11,18 +11,6 @@ import UIKit
 
 class AccountListViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
-    //MARK: Temp fake data
-//    let accounts = [
-//        Account(name: "WF Checking Account", detail: "Wells (x2071)", description: "Same Day"),
-//        Account(name: "WF Savings Account", detail: "Wells (x4578)", description: "Same Day"),
-//        Account(name: "WF Checking Account", detail: "Wells (x2347)", description: "Same Day")
-//    ]
-//
-//    let cards = [
-//        Card(name: "WF Debit", detail: "VISA (x1238)", description: "Instant"),
-//        Card(name: "Chase Credit", detail: "Master (x1239)", description: "Instant"),
-//        Card(name: "Chase Credit", detail: "Master (x1231)", description: "Instant")
-//    ]
     //MARK: Initialization
     
     var accountData: [AccountData] = []
@@ -37,12 +25,11 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
     init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 100)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 84)
         layout.headerReferenceSize = CGSize(width: UIScreen.main.bounds.width, height: 40)
         layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
         super.init(collectionViewLayout: layout)
-//        accountListView.collectionView.dataSource = self
-//        accountListView.collectionView.delegate = self
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -59,6 +46,7 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.titleTextAttributes = [.font: UIFont.vryAvenirNextRegular(20)]
         title = "ACCOUNTS"
+//        navigationController?.navigationBar.barTintColor = ViewColor.surface.color
     }
     
     
@@ -66,7 +54,7 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
     private func setupView() {
 
         view.addSubview(collectionView)
-        collectionView?.backgroundColor = .white
+        collectionView?.backgroundColor = ViewColor.background.color
         collectionView?.register(AccountCell.self, forCellWithReuseIdentifier: accountCellId)
         collectionView?.register(CardCell.self, forCellWithReuseIdentifier: cardCellId)
         collectionView?.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
@@ -125,14 +113,12 @@ extension AccountListViewController {
             var cell: AccountCell!
             let account = accounts[indexPath.item]
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: accountCellId, for: indexPath) as? AccountCell
-            cell.backgroundColor = .yellow
             cell.configure(withAccount: account)
             return cell
         } else {
             var cell: CardCell!
             let card = cards[indexPath.item]
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardCellId, for: indexPath) as? CardCell
-            cell.backgroundColor = .green
             cell.configure(withCard: card)
             return cell
         }
