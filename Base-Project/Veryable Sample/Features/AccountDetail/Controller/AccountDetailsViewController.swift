@@ -36,7 +36,8 @@ class AccountDetailsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        navigationController?.navigationBar.titleTextAttributes = [.font: UIFont.vryAvenirNextRegular(20)]
+        title = "DETAILS"
         if let account = account {
             nameLabel.text = "\(account.name)"
             detailLabel.text = "\(account.detail)"

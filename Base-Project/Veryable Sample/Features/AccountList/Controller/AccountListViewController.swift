@@ -10,40 +10,38 @@ import Foundation
 import UIKit
 
 class AccountListViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
-    //MARK: Public API
-
+    
     //MARK: Temp fake data
-    let accounts = [
-        Account(name: "WF Checking Account", detail: "Wells (x2071)", description: "Same Day"),
-        Account(name: "WF Savings Account", detail: "Wells (x4578)", description: "Same Day"),
-        Account(name: "WF Checking Account", detail: "Wells (x2347)", description: "Same Day")
-    ]
-    
-    let cards = [
-        Card(name: "WF Debit", detail: "VISA (x1238)", description: "Instant"),
-        Card(name: "Chase Credit", detail: "Master (x1239)", description: "Instant"),
-        Card(name: "Chase Credit", detail: "Master (x1231)", description: "Instant")
-    ]
-    
+//    let accounts = [
+//        Account(name: "WF Checking Account", detail: "Wells (x2071)", description: "Same Day"),
+//        Account(name: "WF Savings Account", detail: "Wells (x4578)", description: "Same Day"),
+//        Account(name: "WF Checking Account", detail: "Wells (x2347)", description: "Same Day")
+//    ]
+//
+//    let cards = [
+//        Card(name: "WF Debit", detail: "VISA (x1238)", description: "Instant"),
+//        Card(name: "Chase Credit", detail: "Master (x1239)", description: "Instant"),
+//        Card(name: "Chase Credit", detail: "Master (x1231)", description: "Instant")
+//    ]
     //MARK: Initialization
+    
+    var accountData: [AccountData] = []
+    var accounts: [Account] = []
+    var cards: [Card] = []
     
     let accountSection = 0
     let cardSection = 1
     let accountCellId = "AccountCell"
     let cardCellId = "CardCell"
+    
     init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 100)
-        layout.headerReferenceSize = CGSize(width: UIScreen.main.bounds.width, height: 50)
+        layout.headerReferenceSize = CGSize(width: UIScreen.main.bounds.width, height: 40)
         super.init(collectionViewLayout: layout)
 //        accountListView.collectionView.dataSource = self
 //        accountListView.collectionView.delegate = self
-        if let navigationBar = self.navigationController?.navigationBar {
-            navigationBar.titleTextAttributes = [.font: UIFont.vryAvenirNextRegular(12)]
-        }
-        title = "ACCOUNTS"
-        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -54,12 +52,18 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-
+        fetchData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.titleTextAttributes = [.font: UIFont.vryAvenirNextRegular(20)]
+        title = "ACCOUNTS"
     }
     
     
     //MARK: Setup views
     private func setupView() {
+
         view.addSubview(collectionView)
         collectionView?.backgroundColor = .white
         collectionView?.register(AccountCell.self, forCellWithReuseIdentifier: accountCellId)
@@ -67,7 +71,21 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
         collectionView?.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
     }
 
-    
+    private func fetchData() {
+        //Fetch the account data in a background thread
+        DispatchQueue.global().async {
+            VryNetworkRequest.GETAccountData(completion:  { data, error in
+                if let error = error{
+                    print("Error: \(error)")
+                    return
+                }
+                if let data = data {
+                    self.accountData = data
+                    self.collectionView.reloadData()
+                }
+            })
+        }
+    }
     
     
     
