@@ -16,6 +16,9 @@ class AccountDetailsViewController: UIViewController {
     private let imageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
+        let image = UIImage(named: "")?.withRenderingMode(.alwaysTemplate)
+        iv.image = image
+        iv.tintColor = VBlue.normal.color
         return iv
     }()
     
@@ -41,7 +44,7 @@ class AccountDetailsViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("DONE", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .blue
+        button.backgroundColor = VBlue.normal.color
         button.layer.cornerRadius = 3
         button.titleLabel?.font = UIFont.vryAvenirNextMedium(18)
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
@@ -62,9 +65,9 @@ class AccountDetailsViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = ViewColor.background.color
         if account != nil {
-            imageView.image = UIImage(named: "bank")
+            imageView.image = UIImage(named: "bank")?.withRenderingMode(.alwaysTemplate)
         } else if card != nil {
-            imageView.image = UIImage(named: "card")
+            imageView.image = UIImage(named: "card")?.withRenderingMode(.alwaysTemplate)
         }
         view.addSubview(imageView)
         view.addSubview(nameLabel)
@@ -75,21 +78,21 @@ class AccountDetailsViewController: UIViewController {
     private func setupConstraints() {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: 100),
-            imageView.heightAnchor.constraint(equalToConstant: 100),
-            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            imageView.widthAnchor.constraint(equalToConstant: 96),
+            imageView.heightAnchor.constraint(equalToConstant: 96),
+            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 112),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
+            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 24),
             nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
             descriptionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
@@ -97,7 +100,7 @@ class AccountDetailsViewController: UIViewController {
         NSLayoutConstraint.activate([
             doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            doneButton.heightAnchor.constraint(equalToConstant: 60),
+            doneButton.heightAnchor.constraint(equalToConstant: 56),
             doneButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40),
             doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])

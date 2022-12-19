@@ -13,6 +13,13 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
     
     //MARK: Initialization
     
+    let refreshControl: UIRefreshControl = {
+        let rc = UIRefreshControl()
+        rc.attributedTitle = NSAttributedString(string: "Loading...")
+        rc.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        return rc
+    }()
+    
     var accountData: [AccountData] = []
     var accounts: [Account] = []
     var cards: [Card] = []
@@ -52,14 +59,15 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
     
     //MARK: Setup views
     private func setupView() {
-
         view.addSubview(collectionView)
+//        collectionView.addSubview(refreshControl)
         collectionView?.backgroundColor = ViewColor.background.color
         collectionView?.register(AccountCell.self, forCellWithReuseIdentifier: accountCellId)
         collectionView?.register(CardCell.self, forCellWithReuseIdentifier: cardCellId)
         collectionView?.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
     }
 
+    //MARK: Data
     private func fetchData() {
         //Fetch the account data in a background thread
         DispatchQueue.global(qos: .background).async {
@@ -86,6 +94,11 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
         }
     }
     
+    @objc func refreshData() {
+        fetchData()
+        refreshControl.endRefreshing()
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+    }
     
     
 }
@@ -147,8 +160,4 @@ extension AccountListViewController {
         }
         navigationController?.pushViewController(accountDetailsVC, animated: true)
     }
-}
-
-extension AccountListViewController: AccountListDelegate {
-
 }
