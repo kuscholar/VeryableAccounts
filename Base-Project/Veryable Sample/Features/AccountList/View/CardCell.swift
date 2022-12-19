@@ -15,7 +15,13 @@ class CardCell: UICollectionViewCell {
     
     static let reuseIdentifier = "CardCell"
     var card: Card?
-    var imageView: UIImageView?
+    
+    private let imageView: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(named: "card")
+        return iv
+    }()
     
     private let nameLabel = {
         let label = UILabel()
@@ -24,14 +30,14 @@ class CardCell: UICollectionViewCell {
         return label
     }()
     
-    private let detailLabel = {
+    private let descriptionLabel = {
         let label = UILabel()
         label.font = UIFont.vryAvenirNextRegular(12)
         label.textColor = .gray
         return label
     }()
     
-    private let descriptionLabel = {
+    private let detailLabel = {
         let label = UILabel()
         label.font = UIFont.vryAvenirNextRegular(12)
         label.textColor = .darkText
@@ -60,33 +66,41 @@ class CardCell: UICollectionViewCell {
     func configure(withCard: Card) {
         card = withCard
         nameLabel.text = card?.name
-        detailLabel.text = card?.detail
         descriptionLabel.text = card?.description
+        detailLabel.text = card?.detail
     }
     
     private func setupViews() {
         contentView.addSubview(nameLabel)
-        contentView.addSubview(detailLabel)
         contentView.addSubview(descriptionLabel)
+        contentView.addSubview(detailLabel)
+        contentView.addSubview(imageView)
     }
     
     private func setupConstraints() {
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            imageView.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
-        ])
-        
-        detailLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            detailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
-            detailLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
+            nameLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16)
         ])
         
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 8),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
+            descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            descriptionLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16)
+        ])
+        
+        detailLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            detailLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
+            detailLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16)
         ])
     }
 }

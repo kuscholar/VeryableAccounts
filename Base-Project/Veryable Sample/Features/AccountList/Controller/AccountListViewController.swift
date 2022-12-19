@@ -39,6 +39,7 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
         layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 100)
         layout.headerReferenceSize = CGSize(width: UIScreen.main.bounds.width, height: 40)
+        layout.minimumInteritemSpacing = 0
         super.init(collectionViewLayout: layout)
 //        accountListView.collectionView.dataSource = self
 //        accountListView.collectionView.delegate = self
@@ -51,8 +52,8 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         fetchData()
+        setupView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,7 +74,7 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
 
     private func fetchData() {
         //Fetch the account data in a background thread
-        DispatchQueue.global().async {
+        DispatchQueue.global(qos: .background).async {
             VryNetworkRequest.GETAccountData(completion:  { data, error in
                 if let error = error{
                     print("Error: \(error)")
@@ -81,9 +82,19 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
                 }
                 if let data = data {
                     self.accountData = data
+                    for accountData in data {
+                        if accountData.accountType == "bank" {
+                            self.accounts.append(Account(data: accountData))
+                        } else if accountData.accountType == "card" {
+                            self.cards.append(Card(data: accountData))
+                        } else {
+                            print("Error: Unrecognized data type with data: \(accountData)")
+                        }
+                    }
                     self.collectionView.reloadData()
                 }
             })
+            
         }
     }
     
@@ -141,7 +152,7 @@ extension AccountListViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let accountDetailsVC = AccountDetailsViewController()
-        if indexPath.section == cardSection {
+        if indexPath.section == accountSection {
             let account = accounts[indexPath.item]
             accountDetailsVC.account = account
         } else {

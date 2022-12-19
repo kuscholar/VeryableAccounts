@@ -18,8 +18,8 @@ class VryNetworkRequest {
             //Check for errors
             if let error = response.error {
                 completion(nil, error)
+                return
             }
-            return
             
             //Check the data was returned
             guard let data = response.data else {

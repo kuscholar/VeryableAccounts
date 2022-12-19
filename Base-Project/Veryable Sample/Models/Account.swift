@@ -9,13 +9,17 @@
 import Foundation
 
 struct Account {
-    var name: String
-    var detail: String
-    var description: String
+    let id: Int
+    let type: String
+    let name: String
+    let description: String
+    let detail: String
     
-    init(name: String, detail: String, description: String) {
-        self.name = name
-        self.detail = detail
-        self.description = description
+    init(data: AccountData) {
+        self.id = data.id
+        self.type = data.accountType
+        self.name = data.accountName
+        self.description = data.description
+        self.detail = "Bank Account: ACH - Same Day"
     }
 }
