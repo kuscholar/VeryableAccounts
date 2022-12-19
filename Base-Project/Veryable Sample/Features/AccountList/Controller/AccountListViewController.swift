@@ -12,15 +12,25 @@ import UIKit
 class AccountListViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     //MARK: Public API
 
-
+    //MARK: Temp fake data
+    let accounts = [
+        Account(name: "WF Checking Account", detail: "Wells (x2071)", description: "Same Day"),
+        Account(name: "WF Savings Account", detail: "Wells (x4578)", description: "Same Day"),
+        Account(name: "WF Checking Account", detail: "Wells (x2347)", description: "Same Day")
+    ]
     
-    
-//    var accountListView: AccountListView {
-//        return view as! AccountListView
-//    }
+    let cards = [
+        Card(name: "WF Debit", detail: "VISA (x1238)", description: "Instant"),
+        Card(name: "Chase Credit", detail: "Master (x1239)", description: "Instant"),
+        Card(name: "Chase Credit", detail: "Master (x1231)", description: "Instant")
+    ]
     
     //MARK: Initialization
     
+    let accountSection = 0
+    let cardSection = 1
+    let accountCellId = "AccountCell"
+    let cardCellId = "CardCell"
     init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -52,7 +62,8 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
     private func setupView() {
         view.addSubview(collectionView)
         collectionView?.backgroundColor = .white
-        collectionView?.register(AccountCell.self, forCellWithReuseIdentifier: "AccountCell")
+        collectionView?.register(AccountCell.self, forCellWithReuseIdentifier: accountCellId)
+        collectionView?.register(CardCell.self, forCellWithReuseIdentifier: cardCellId)
         collectionView?.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
     }
 
@@ -65,38 +76,44 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
 extension AccountListViewController {
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        if accounts.count != 0 && cards.count != 0 {
+            return 2
+        } else if accounts.count == 0 && cards.count == 0 {
+            return 0
+        }
+        return 1
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // First section is bank accounts, the other is cards
         //TODO: change hard coded numbers to accounts.count
-        return section == 0 ? 6 : 3
+        return section == accountSection ? accounts.count : cards.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //Configure cells
-        var cell: UICollectionViewCell!
-        if indexPath.section == 0 {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: AccountListView.accountCellId, for: indexPath) as! AccountCell
+        if indexPath.section == accountSection {
+            var cell: AccountCell!
+            let account = accounts[indexPath.item]
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: accountCellId, for: indexPath) as? AccountCell
             cell.backgroundColor = .yellow
+            cell.configure(withAccount: account)
+            return cell
         } else {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: AccountListView.accountCellId, for: indexPath) as! AccountCell
+            var cell: CardCell!
+            let card = cards[indexPath.item]
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: cardCellId, for: indexPath) as? CardCell
             cell.backgroundColor = .green
+            cell.configure(withCard: card)
+            return cell
         }
         
-        return cell
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        //Specify the size of the cells
-//        return CGSize(width: collectionView.frame.width, height: 130)
-//    }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         //Configure header view
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: indexPath) as! HeaderView
-        if indexPath.section == 0 {
+        if indexPath.section == accountSection {
             headerView.titleLabel.text = "Bank Accounts"
         } else {
             headerView.titleLabel.text = "Cards"
@@ -104,10 +121,17 @@ extension AccountListViewController {
         return headerView
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        //Specify the size of the header view
-//        return CGSize(width: collectionView.bounds.width, height: 80)
-//    }
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let accountDetailsVC = AccountDetailsViewController()
+        if indexPath.section == cardSection {
+            let account = accounts[indexPath.item]
+            accountDetailsVC.account = account
+        } else {
+            let card = cards[indexPath.item]
+            accountDetailsVC.card = card
+        }
+        navigationController?.pushViewController(accountDetailsVC, animated: true)
+    }
 }
 
 extension AccountListViewController: AccountListDelegate {

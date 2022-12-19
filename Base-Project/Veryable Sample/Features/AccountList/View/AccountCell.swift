@@ -14,6 +14,9 @@ class AccountCell: UICollectionViewCell {
     //MARK: Properties
     
     static let reuseIdentifier = "AccountCell"
+    var account: Account?
+    var imageView: UIImageView?
+    
     private let nameLabel = {
         let label = UILabel()
         label.font = UIFont.vryAvenirNextDemiBold(14)
@@ -41,7 +44,6 @@ class AccountCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
-        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -55,8 +57,11 @@ class AccountCell: UICollectionViewCell {
         setupConstraints()
     }
     
-    private func configure() {
-        
+    func configure(withAccount: Account) {
+        account = withAccount
+        nameLabel.text = account?.name
+        detailLabel.text = account?.detail
+        descriptionLabel.text = account?.description
     }
     
     private func setupViews() {
@@ -69,15 +74,19 @@ class AccountCell: UICollectionViewCell {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
         ])
         
         detailLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             detailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
-            detailLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            detailLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            detailLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
+        ])
+        
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            descriptionLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 8),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
         ])
     }
 }
