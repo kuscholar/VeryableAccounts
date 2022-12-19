@@ -1,7 +1,7 @@
 # VeryableAccounts
  
 ## Instructions
-- This is a part of the Verable app with two pages where the user can see the list of their banking and card accounts (AccountList) and select an individual account to view some details (AccountDetail).
+- This is a part of the Veryable app with two pages where the user can see the list of their banking and card accounts (AccountList) and select an individual account to view some details (AccountDetail).
 
 - The app makes HTTP request to retrieve [JSON data](https://veryable-public-assets.s3.us-east-2.amazonaws.com/veryable.json) hosted on S3. The application  parses the response to the appropriate model and display in order.
 
