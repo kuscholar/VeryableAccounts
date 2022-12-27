@@ -60,7 +60,7 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
     //MARK: Setup views
     private func setupView() {
         view.addSubview(collectionView)
-//        collectionView.addSubview(refreshControl)
+        collectionView.addSubview(refreshControl)
         collectionView?.backgroundColor = ViewColor.background.color
         collectionView?.register(AccountCell.self, forCellWithReuseIdentifier: accountCellId)
         collectionView?.register(CardCell.self, forCellWithReuseIdentifier: cardCellId)
@@ -77,12 +77,17 @@ class AccountListViewController: UICollectionViewController, UICollectionViewDel
                     return
                 }
                 if let data = data {
+                    print("Data fetched!")
                     self.accountData = data
+                    self.accounts = []
+                    self.cards = []
                     for accountData in data {
                         if accountData.accountType == "bank" {
                             self.accounts.append(Account(data: accountData))
+                            print("Added bank account: \(accountData)")
                         } else if accountData.accountType == "card" {
                             self.cards.append(Card(data: accountData))
+                            print("Added card: \(accountData)")
                         } else {
                             print("Error: Unrecognized data type with data: \(accountData)")
                         }
